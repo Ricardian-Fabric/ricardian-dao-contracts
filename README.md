@@ -4,25 +4,25 @@ The smart contracts in this library are the DAO contracts for Ricardian Fabric.
 
 ## Testnet addresses
 
-Signup deployed to: 0xC513a5B27F802980B3b9be9e95A2dEe1F2FEd6d2
+Signup deployed to: 0xEaF201f1d59BFa87176C4445B22A5fF4a0fAa23b
 
-Trails deployed to 0xf8214Ae56b2d1dc6b7F7E3F981A2624AdcC81746
+Trails deployed to 0x0A40FF105c915955071e6F2214247670c8d91dED
 
-CatalogDAO library deployed to: 0x8B71E8277b231b20d10115383DD7CDd212198357
+CatalogDAO library deployed to: 0x61f1326876C1C2DB4DCB2E6D2bfA45c98D207615
 
-Catalogdao deployed to: 0x13c112Ce9E7466D487F66602e0ae8D20826976f9
+Catalogdao deployed to: 0x8Ea39d9b53DDBC2F81B2c64FbA8d47f6b7cF3107
 
-Ric deployed to: 0x7d02F0be57dC3Cf9Bfa49F6e859415981166F49b
+Ric deployed to: 0x3DdfA89CfAD4f6d812b55A3AE87c00A1cAE2F38f
 
-Ric sale deployed to: 0x0607b120F87876aFa9Fa898DE10c7ad293e4476a
+Ric sale deployed to: 0xCeF11F95ef976e60d69f30edaCCEA48099c97879
 
-ArweavePs deployed to: 0x705fB7fd5e95Fb04F1342b6879465B47030638C4
+ArweavePs deployed to: 0x51f3A69de3D890f42422BC8cc652eDB59fc065AA
 
-DaoStaking deployed to: 0x51780909577786Ab1a3Ab70D9a2a7c2b4571d489
+DaoStaking deployed to: 0x9dC2702FE6224fE880d345D079A30b01ba1cE905
 
-FeeDao deployed to: 0x23928e76411cA69Bbb89E8c843F35917580Ee409
+FeeDao deployed to: 0xB839D0e2997859D8d2e47c47dbF16939ee655336
 
-Ric vault deployed to: 0x0Da072BD910F144917cf40f48A614c9Ae4aBB9cd
+Ric vault deployed to: 0x93cb87281CFCfb3dABbC72c5f307f17A79F806db
 
 ## Smart contracts
 
@@ -51,7 +51,6 @@ You can find the Api in the /docs folder.
 - **Uses a ricardian contract** to define the conditions to pass the proposal review.
 
 #### DaoStaking
-
 
 - **Staking is for sybil resistance**.
 - **3000 Ric must be staked** before contributing to the CatalogDao.
