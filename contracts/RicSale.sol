@@ -38,10 +38,6 @@ contract RicSale is Context, ReentrancyGuard {
 
     uint256 private tokensSold;
 
-    // An address can only make 1 purchase per rate.
-    // This tracks if an address purchased tokens at a rate already or not
-    mapping(address => mapping(uint256 => bool)) private purchased;
-
     /**
      * Event for token purchase logging
      * @param purchaser who paid for the tokens
@@ -100,11 +96,6 @@ contract RicSale is Context, ReentrancyGuard {
         return _weiRaised;
     }
 
-    function purchasedAlready(address _address) public view returns (bool) {
-        uint256 currentRate = getCurrentRate(tokensSold);
-        return purchased[_address][currentRate];
-    }
-
     /**
      * @dev low level token purchase ***DO NOT OVERRIDE***
      * This function has a non-reentrancy guard, so it shouldn't be called by
@@ -113,26 +104,18 @@ contract RicSale is Context, ReentrancyGuard {
     function buyTokens() public payable nonReentrant {
         require(tokensSold <= 40000000e18, "955");
         uint256 weiAmount = msg.value;
-        uint256 currentRate = getCurrentRate(tokensSold);
+        uint256 currentRate = getCurrentRate();
 
-        _preValidatePurchase(
-            msg.sender,
-            weiAmount,
-            purchased[msg.sender][currentRate]
-        );
-        purchased[msg.sender][currentRate] = true;
+        _preValidatePurchase(msg.sender, weiAmount);
         // calculate token amount to be created
         uint256 tokens = _getTokenAmount(currentRate, weiAmount);
         require(tokens <= 100000e18, "950"); // Maximum purchase amount per purchase
         tokensSold = tokensSold.add(tokens);
         // update state
         _weiRaised = _weiRaised.add(weiAmount);
-
         _processPurchase(msg.sender, tokens);
         emit TokensPurchased(_msgSender(), msg.sender, weiAmount, tokens);
-
         _updatePurchasingState(msg.sender, weiAmount);
-
         _forwardFunds();
         _postValidatePurchase(msg.sender, weiAmount);
     }
@@ -144,14 +127,12 @@ contract RicSale is Context, ReentrancyGuard {
      * @param beneficiary Address performing the token purchase
      * @param weiAmount Value in wei involved in the purchase
      */
-    function _preValidatePurchase(
-        address beneficiary,
-        uint256 weiAmount,
-        bool _purchased_
-    ) internal pure {
+    function _preValidatePurchase(address beneficiary, uint256 weiAmount)
+        internal
+        pure
+    {
         require(beneficiary != address(0), "948");
         require(weiAmount != 0, "949");
-        require(!_purchased_, "951");
     }
 
     /**
@@ -218,34 +199,8 @@ contract RicSale is Context, ReentrancyGuard {
         return tokensSold;
     }
 
-    function getCurrentRate(uint256 _tokensSold_)
-        public
-        pure
-        returns (uint256)
-    {
-        if (_tokensSold_ < 4000000e18) {
-            return 10;
-        } else if (_tokensSold_ >= 4000000e18 && _tokensSold_ < 8000000e18) {
-            return 9;
-        } else if (_tokensSold_ >= 8000000e18 && _tokensSold_ < 12000000e18) {
-            return 8;
-        } else if (_tokensSold_ >= 12000000e18 && _tokensSold_ < 16000000e18) {
-            return 7;
-        } else if (_tokensSold_ >= 16000000e18 && _tokensSold_ < 20000000e18) {
-            return 6;
-        } else if (_tokensSold_ >= 20000000e18 && _tokensSold_ < 24000000e18) {
-            return 5;
-        } else if (_tokensSold_ >= 24000000e18 && _tokensSold_ < 28000000e18) {
-            return 4;
-        } else if (_tokensSold_ >= 28000000e18 && _tokensSold_ < 32000000e18) {
-            return 3;
-        } else if (_tokensSold_ >= 32000000e18 && _tokensSold_ < 36000000e18) {
-            return 2;
-        } else if (_tokensSold_ >= 36000000e18 && _tokensSold_ < 40000000e18) {
-            return 1;
-        } else {
-            return 1;
-        }
+    function getCurrentRate() public pure returns (uint256) {
+        return 5;
     }
 
     /**

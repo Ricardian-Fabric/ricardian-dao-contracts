@@ -12,9 +12,11 @@ export const RICKVAULTALLOCATION = "40000000"; // TOTAL RIC ALLOCATION 20.000.00
 export const RICTOLOCK = "2000000"; // 2.000.000 Lock this amount for RICLOCKINTERVAL
 export const RICLOCKINTERVAL = 7000000; // 7.000.000
 
-export const FEEDAOPOLLPERIOD = 259200; // The front end is coded to use the same values for the periods!
-export const CATALOGPOLLPERIOD = 259200; // around 6 days
+export const FEEDAOPOLLPERIOD = 100; //FOR TESTNET THE TIME IS SHORTER//259200; // The front end is coded to use the same values for the periods!
+export const CATALOGPOLLPERIOD = 100; //FOR TESTNET THE TIME IS SHORTER//259200; // around 6 days
 
+// THIS IS LIVE TESTNET PUBLIC KEY
+export const RICSELLERADDRESS = "0xDF16399E6F10bbC1C07C88c6c70116182FA2e118";
 const DAOSTAKINGPERIOD = 864000; // around 20 days
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -71,11 +73,8 @@ export async function deploymentScript(arg: DeploymentArg) {
         const ric = await ricToken.deployed();
         setTimeout(async () => {
           const RICSale = await ethers.getContractFactory("RicSale");
-          // TODO: THIS IS THE LIVE TESTNET PUBLIC KEY
-          const RicSale = await RICSale.deploy(
-            "0xDF16399E6F10bbC1C07C88c6c70116182FA2e118",
-            ric.address
-          );
+
+          const RicSale = await RICSale.deploy(RICSELLERADDRESS, ric.address);
           const ricsale = await RicSale.deployed();
           setTimeout(async () => {
             const ArweavePS = await ethers.getContractFactory("ArweavePS");
@@ -200,7 +199,7 @@ export async function deploymentScript(arg: DeploymentArg) {
                                       setTimeout(async () => {
                                         console.log(
                                           await ric.allowance(
-                                            "0xDF16399E6F10bbC1C07C88c6c70116182FA2e118",
+                                            RICSELLERADDRESS,
                                             ricsale.address
                                           )
                                         );
