@@ -12,8 +12,8 @@ export const RICKVAULTALLOCATION = "40000000"; // TOTAL RIC ALLOCATION 20.000.00
 export const RICTOLOCK = "2000000"; // 2.000.000 Lock this amount for RICLOCKINTERVAL
 export const RICLOCKINTERVAL = 7000000; // 7.000.000
 
-export const FEEDAOPOLLPERIOD = 100; //FOR TESTNET THE TIME IS SHORTER//259200; // The front end is coded to use the same values for the periods!
-export const CATALOGPOLLPERIOD = 100; //FOR TESTNET THE TIME IS SHORTER//259200; // around 6 days
+export const FEEDAOPOLLPERIOD = 259200; // The front end is coded to use the same values for the periods!
+export const CATALOGPOLLPERIOD = 259200; // around 6 days
 
 // THIS IS LIVE TESTNET PUBLIC KEY
 export const RICSELLERADDRESS = "0xDF16399E6F10bbC1C07C88c6c70116182FA2e118";
