@@ -50,53 +50,121 @@ type DeploymentArg = {
   CATALOGPOLLPERIOD: number;
   DAOSTAKINGPERIOD: number;
 };
-
+const gasPrice = ethers.utils.parseUnits("32", "gwei");
 // Export for testing
 export async function deploymentScript(arg: DeploymentArg) {
   setTimeout(async () => {
-    const SignUp = await ethers.getContractFactory("SimpleTerms");
-    const signUp = await SignUp.deploy();
-    const signup = await signUp.deployed();
-
+    // const SignUp = await ethers.getContractFactory("SimpleTerms");
+    // const signUp = await SignUp.deploy();
+    // const signup = await signUp.deployed();
+    // console.log("Signup deployed to:", signup.address);
+    // console.log(
+    //   "Signup deploy transaction gasPrice",
+    //   ethers.utils.formatEther(
+    //     signup.deployTransaction.gasPrice !== undefined
+    //       ? signup.deployTransaction.gasPrice.toString()
+    //       : ""
+    //   ),
+    //   " gasLimit: ",
+    //   signup.deployTransaction.gasLimit
+    // );
+    console.log(
+      "Signup is already deployed on mainnet to ",
+      "0xdC627A00D6d717c3A920ed07C28027E6f4474dF6"
+    );
     setTimeout(async () => {
       const TrailsRegistry = await ethers.getContractFactory("TrailsRegistry");
-      const trailsRegistry = await TrailsRegistry.deploy();
+      const trailsRegistry = await TrailsRegistry.deploy({
+        gasPrice: gasPrice,
+      });
       const trails = await trailsRegistry.deployed();
-
+      console.log("Trails deployed to ", trails.address);
+      console.log(
+        "Trails deploy transaction gasPrice",
+        trails.deployTransaction.gasPrice,
+        " gasLimit: ",
+        trails.deployTransaction.gasLimit
+      );
       setTimeout(async () => {
         const RicToken = await ethers.getContractFactory("Ric");
 
         const ricToken = await RicToken.deploy(
-          ethers.utils.parseEther(arg.RICTOTALSUPPLY)
+          ethers.utils.parseEther(arg.RICTOTALSUPPLY),
+          { gasPrice: gasPrice }
         );
 
         const ric = await ricToken.deployed();
+        console.log("Ric deployed to:", ric.address);
+        console.log(
+          "Ric deploy transaction gasPrice",
+          ric.deployTransaction.gasPrice,
+          " gasLimit: ",
+          ric.deployTransaction.gasLimit
+        );
         setTimeout(async () => {
           const RICSale = await ethers.getContractFactory("RicSale");
 
-          const RicSale = await RICSale.deploy(RICSELLERADDRESS, ric.address);
+          const RicSale = await RICSale.deploy(RICSELLERADDRESS, ric.address, {
+            gasPrice: gasPrice,
+          });
           const ricsale = await RicSale.deployed();
+          console.log("Ric sale deployed to:", ricsale.address);
+
+          console.log(
+            "RicSale deploy transaction gasPrice",
+            ricsale.deployTransaction.gasPrice,
+            " gasLimit: ",
+            ricsale.deployTransaction.gasLimit
+          );
           setTimeout(async () => {
             const ArweavePS = await ethers.getContractFactory("ArweavePS");
-            const arweavePS = await ArweavePS.deploy();
+            const arweavePS = await ArweavePS.deploy({ gasPrice: gasPrice });
             const arweaveps = await arweavePS.deployed();
+            console.log("ArweavePs deployed to:", arweaveps.address);
+
+            console.log(
+              "ArweavePs deploy transaction gasPrice",
+              arweaveps.deployTransaction.gasPrice,
+              " gasLimit: ",
+              arweaveps.deployTransaction.gasLimit
+            );
             setTimeout(async () => {
               const DAOStaking = await ethers.getContractFactory("DaoStaking");
 
               const DaoStaking = await DAOStaking.deploy(
                 ric.address,
                 arweaveps.address,
-                arg.DAOSTAKINGPERIOD
+                arg.DAOSTAKINGPERIOD,
+                { gasPrice: gasPrice }
               );
               const daoStaking = await DaoStaking.deployed();
+              console.log("DaoStaking deployed to:", daoStaking.address);
+              console.log(
+                "DaoStaking deploy transaction gasPrice",
+                daoStaking.deployTransaction.gasPrice,
+                " gasLimit: ",
+                daoStaking.deployTransaction.gasLimit
+              );
               setTimeout(async () => {
                 await arweaveps.setStakingLib(daoStaking.address);
                 setTimeout(async () => {
                   const CatalogDAOLib = await ethers.getContractFactory(
                     "CatalogDaoLib"
                   );
-                  const catalogDAOLib = await CatalogDAOLib.deploy();
+                  const catalogDAOLib = await CatalogDAOLib.deploy({
+                    gasPrice: gasPrice,
+                  });
                   const catalogdaolib = await catalogDAOLib.deployed();
+                  console.log(
+                    "CatalogDAO library deployed to:",
+                    catalogdaolib.address
+                  );
+                  console.log(
+                    "CatalogDaoLibrary deploy transaction gasPrice",
+                    catalogdaolib.deployTransaction.gasPrice,
+                    " gasLimit: ",
+                    catalogdaolib.deployTransaction.gasLimit
+                  );
                   setTimeout(async () => {
                     const CatalogDAO = await ethers.getContractFactory(
                       "CatalogDao",
@@ -108,9 +176,17 @@ export async function deploymentScript(arg: DeploymentArg) {
                     // It's 259200 now on Harmony testnet
                     const catalogDAO = await CatalogDAO.deploy(
                       arg.CATALOGPOLLPERIOD,
-                      daoStaking.address
+                      daoStaking.address,
+                      { gasPrice: gasPrice }
                     );
                     await catalogDAO.deployed();
+                    console.log("Catalogdao deployed to:", catalogDAO.address);
+                    console.log(
+                      "CatalogDao deploy transaction gasPrice",
+                      catalogDAO.deployTransaction.gasPrice,
+                      " gasLimit: ",
+                      catalogDAO.deployTransaction.gasLimit
+                    );
                     setTimeout(async () => {
                       daoStaking.setCatalogDao(catalogDAO.address);
                       setTimeout(async () => {
@@ -121,104 +197,94 @@ export async function deploymentScript(arg: DeploymentArg) {
                           ric.address,
                           daoStaking.address,
                           catalogDAO.address,
-                          arg.FEEDAOPOLLPERIOD
+                          arg.FEEDAOPOLLPERIOD,
+                          { gasPrice: gasPrice }
                         );
                         const feedao = await feeDao.deployed();
+                        console.log("FeeDao deployed to:", feedao.address);
+                        console.log(
+                          "FeeDao deploy transaction gasPrice",
+                          feedao.deployTransaction.gasPrice,
+                          " gasLimit: ",
+                          feedao.deployTransaction.gasLimit
+                        );
                         setTimeout(async () => {
                           const RicVault = await ethers.getContractFactory(
                             "RicVault"
                           );
-                          const ricVault = await RicVault.deploy(ric.address);
+                          const ricVault = await RicVault.deploy(ric.address, {
+                            gasPrice: gasPrice,
+                          });
                           const ricvault = await ricVault.deployed();
+                          console.log(
+                            "Ric vault deployed to: ",
+                            ricvault.address
+                          );
+                          console.log(
+                            "Ric vault deploy transaction gasPrice",
+                            ricvault.deployTransaction.gasPrice,
+                            " gasLimit: ",
+                            ricvault.deployTransaction.gasLimit
+                          );
                           setTimeout(async () => {
-                            await feedao.setRicVault(ricvault.address);
+                            await feedao.setRicVault(ricvault.address, {
+                              gasPrice: gasPrice,
+                            });
                             setTimeout(async () => {
-                              await ricvault.setFeeDao(feedao.address);
+                              await ricvault.setFeeDao(feedao.address, {
+                                gasPrice: gasPrice,
+                              });
+
                               setTimeout(async () => {
-                                console.log(
-                                  "Signup deployed to:",
-                                  signup.address
-                                );
-                                console.log(
-                                  "Trails deployed to ",
-                                  trails.address
-                                );
-                                console.log(
-                                  "CatalogDAO library deployed to:",
-                                  catalogdaolib.address
-                                );
-                                console.log(
-                                  "Catalogdao deployed to:",
-                                  catalogDAO.address
-                                );
-                                console.log("Ric deployed to:", ric.address);
-                                console.log(
-                                  "Ric sale deployed to:",
-                                  ricsale.address
-                                );
-                                console.log(
-                                  "ArweavePs deployed to:",
-                                  arweaveps.address
-                                );
-                                console.log(
-                                  "DaoStaking deployed to:",
-                                  daoStaking.address
-                                );
-                                console.log(
-                                  "FeeDao deployed to:",
-                                  feedao.address
-                                );
-                                console.log(
-                                  "Ric vault deployed to: ",
-                                  ricvault.address
+                                await ric.approve(
+                                  daoStaking.address,
+                                  ethers.utils.parseEther(
+                                    arg.DAOSTAKINGALLOCATION
+                                  ),
+                                  { gasPrice: gasPrice }
                                 );
                                 setTimeout(async () => {
-                                  await ric.approve(
-                                    daoStaking.address,
+                                  // 20 % goes to the daoStaking reward
+
+                                  await daoStaking.depositRewards(
                                     ethers.utils.parseEther(
                                       arg.DAOSTAKINGALLOCATION
-                                    )
+                                    ),
+                                    { gasPrice: gasPrice }
                                   );
                                   setTimeout(async () => {
-                                    // 20 % goes to the daoStaking reward
-
-                                    await daoStaking.depositRewards(
+                                    // 40 % goes to the membership (crowdsale) contract
+                                    // No transfer, only approval
+                                    await ric.approve(
+                                      ricsale.address,
                                       ethers.utils.parseEther(
-                                        arg.DAOSTAKINGALLOCATION
-                                      )
+                                        arg.MEMBERSHIPALLOCATION
+                                      ),
+                                      { gasPrice: gasPrice }
                                     );
                                     setTimeout(async () => {
-                                      // 40 % goes to the membership (crowdsale) contract
-                                      // No transfer, only approval
-                                      await ric.approve(
-                                        ricsale.address,
-                                        ethers.utils.parseEther(
-                                          arg.MEMBERSHIPALLOCATION
+                                      console.log(
+                                        await ric.allowance(
+                                          RICSELLERADDRESS,
+                                          ricsale.address
                                         )
                                       );
-                                      setTimeout(async () => {
-                                        console.log(
-                                          await ric.allowance(
-                                            RICSELLERADDRESS,
-                                            ricsale.address
-                                          )
-                                        );
-                                        console.log(
-                                          await ricsale.remainingTokens()
-                                        );
+                                      console.log(
+                                        await ricsale.remainingTokens()
+                                      );
 
-                                        // 20 % goes to the Ric vault,
-                                        await ric.approve(
-                                          ricvault.address,
-                                          ethers.utils.parseEther(
-                                            arg.RICKVAULTALLOCATION
-                                          )
-                                        );
-                                      }, 38000);
-                                    }, 36000);
-                                  }, 34000);
-                                }, 32000);
-                              }, 30000);
+                                      // 20 % goes to the Ric vault,
+                                      await ric.approve(
+                                        ricvault.address,
+                                        ethers.utils.parseEther(
+                                          arg.RICKVAULTALLOCATION
+                                        ),
+                                        { gasPrice: gasPrice }
+                                      );
+                                    }, 38000);
+                                  }, 36000);
+                                }, 34000);
+                              }, 32000);
                             }, 28000);
                           }, 26000);
                         }, 24000);
