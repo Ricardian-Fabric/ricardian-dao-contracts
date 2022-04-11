@@ -37,18 +37,9 @@ Returns the amount of Wei raised
 
 Returns the amount of tokens remaining for sale.
 
-    function getCurrentRate(uint256 _tokensSold_)
+    function getCurrentRate()
     	public
     	pure
     	returns (uint256);
 
 Returns the current rate at which the tokens are sold.
-The sale starts at rate 10 and it's incrementing until 40.000.000 are sold.
-
-The final rate for the last tokens is 1.
-
-This will be deployed on Harmony so the sale price starts at 0.1 ONE (around 0.03 USD) and increments till 1 ONE ( around 0.3 USD)
-
-    function purchasedAlready(address _address) public view returns (bool);
-
-Returns if the address has made a purchase at the current price rate.
