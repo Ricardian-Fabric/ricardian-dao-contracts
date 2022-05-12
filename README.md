@@ -2,6 +2,8 @@
 
 The smart contracts in this library are the DAO contracts for Ricardian Fabric.
 
+#NOTE : We are currently REFACTORING to deploy this on MULTIPLE CHAINS!
+
 ## Mainnet addresses:
 
 Signup deployed to : 0xdC627A00D6d717c3A920ed07C28027E6f4474dF6
