@@ -33,16 +33,11 @@ describe("daoStaking", async function () {
     );
   });
   it("stakes and unstakes", async function () {
-    const { participant1, daoStaking, arweaveps, ric } = await setUp(true);
-
-    await arweaveps.connect(participant1).setPS("participant 1 address");
+    const { participant1, daoStaking, ric } = await setUp(true);
 
     await expectRevert(() => daoStaking.connect(participant1).unStake(), "924");
 
     await mineBlocks(100).then(async () => {
-      let PS = new Array(await arweaveps.getAllPS());
-      expect(PS[0][0].sharing).to.equal(true);
-
       expect(await ric.balanceOf(daoStaking.address)).to.equal(
         ethers.utils.parseEther("15000")
       );
@@ -62,9 +57,6 @@ describe("daoStaking", async function () {
       expect(await ric.balanceOf(participant1.address)).to.equal(
         ethers.utils.parseEther("10000")
       );
-
-      PS = new Array(await arweaveps.getAllPS());
-      expect(PS[0][0].sharing).to.equal(false);
 
       expect(await daoStaking.isStaking(participant1.address)).to.equal(false);
 
