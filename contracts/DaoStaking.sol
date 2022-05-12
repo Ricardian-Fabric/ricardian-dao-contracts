@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./CatalogDao.sol";
-import "./ArweavePS.sol";
 import "./libraries/CatalogDaoLib.sol";
 
 // Staking is for sybil resistance.
@@ -27,14 +26,11 @@ contract DaoStaking is Ownable {
     uint256 private constant FEATUREREWARD = 3000e18;
 
     CatalogDao private catalogDao;
-    ArweavePS private arweavePS;
     uint256 private totalStaked;
     uint256 private availableReward;
 
     uint256 private stakingBlocks; // The blocks that need to pass before the staking can be removed.
 
-    // mapping(address => bool) private stakers;
-    // mapping(address => uint256) private stakeDate;
     mapping(address => Staker) private stakers;
     address[] public allStakers;
     mapping(string => bool) private rewardedProposals;
@@ -56,14 +52,9 @@ contract DaoStaking is Ownable {
         uint256 availableReward
     );
 
-    constructor(
-        IERC20 _token_,
-        ArweavePS _ps_,
-        uint256 _stakingBlocks_
-    ) {
+    constructor(IERC20 _token_, uint256 _stakingBlocks_) {
         _token = IERC20(_token_);
         totalStaked = 0;
-        arweavePS = _ps_;
         stakingBlocks = _stakingBlocks_;
     }
 
@@ -143,7 +134,6 @@ contract DaoStaking is Ownable {
         );
         stakers[msg.sender].isStaking = false;
         totalStaked -= stakers[msg.sender].stakeAmount;
-        arweavePS.stoppedStaking(msg.sender);
         catalogDao.retire(msg.sender);
         _token.safeTransfer(msg.sender, stakers[msg.sender].stakeAmount);
         emit Unstake(msg.sender, totalStaked);
@@ -166,7 +156,6 @@ contract DaoStaking is Ownable {
         // It's added to the reward
         availableReward += stakers[address_].stakeAmount;
         stakers[address_].stakeAmount = 0;
-        arweavePS.stoppedStaking(address_);
         emit Penalize(address_);
         emit Unstake(msg.sender, totalStaked);
     }
