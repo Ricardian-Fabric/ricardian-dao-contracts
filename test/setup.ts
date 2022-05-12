@@ -32,9 +32,6 @@ export async function setUp(withStake: boolean): Promise<any> {
   const SignUp = await ethers.getContractFactory("SimpleTerms");
   const signUp = await SignUp.deploy();
   const signup = await signUp.deployed();
-  const TrailsRegistry = await ethers.getContractFactory("TrailsRegistry");
-  const trailsRegistry = await TrailsRegistry.deploy();
-  const trails = await trailsRegistry.deployed();
 
   const RicToken = await ethers.getContractFactory("Ric");
 
@@ -47,18 +44,13 @@ export async function setUp(withStake: boolean): Promise<any> {
   const RicSale = await RICSale.deploy(owner.address, ric.address);
   const ricsale = await RicSale.deployed();
 
-  const ArweavePS = await ethers.getContractFactory("ArweavePS");
-  const arweavePS = await ArweavePS.deploy();
-  const arweaveps = await arweavePS.deployed();
   const DAOStaking = await ethers.getContractFactory("DaoStaking");
 
   const DaoStaking = await DAOStaking.deploy(
     ric.address,
-    arweaveps.address,
     100 // The staking is locked for only 100 blocks for testing purposeszs
   );
   const daoStaking = await DaoStaking.deployed();
-  await arweaveps.setStakingLib(daoStaking.address);
   const CatalogDAOLib = await ethers.getContractFactory("CatalogDaoLib");
   const catalogDAOLib = await CatalogDAOLib.deploy();
   const catalogdaolib = await catalogDAOLib.deployed();
@@ -140,7 +132,6 @@ export async function setUp(withStake: boolean): Promise<any> {
   }
 
   return {
-    trails,
     catalogDAO,
     owner,
     participant1,
@@ -148,7 +139,6 @@ export async function setUp(withStake: boolean): Promise<any> {
     participant3,
     participant4,
     participant5,
-    arweaveps,
     ric,
     daoStaking,
     feedao,
