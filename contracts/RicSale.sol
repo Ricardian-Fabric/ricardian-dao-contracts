@@ -102,7 +102,7 @@ contract RicSale is Context, ReentrancyGuard {
      * another `nonReentrant` function.
      */
     function buyTokens() public payable nonReentrant {
-        require(tokensSold <= 40000000e18, "955");
+        require(tokensSold <= 2000000e18, "955");
         uint256 weiAmount = msg.value;
         uint256 currentRate = getCurrentRate();
 
