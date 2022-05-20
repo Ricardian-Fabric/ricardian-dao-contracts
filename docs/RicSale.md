@@ -16,7 +16,7 @@ If eth is transfered, the receive will call buyTokens, but it's preferred to cal
 
     function buyTokens() public payable nonReentrant;
 
-The prefered way to purchase tokens is via the buy functions. Max tokens sold are 40.000.000.
+The prefered way to purchase tokens is via the buy functions. Max tokens sold are 2.000.000.
 An address can only purchase max 100.000 tokens per Rate as it increases.
 
 # View functions
