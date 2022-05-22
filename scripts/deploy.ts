@@ -10,8 +10,8 @@ export const RICTOTALSUPPLY = "4000000"; // 4.000.000
 export const FEEDAOPOLLPERIOD = 259200; // The front end is coded to use the same values for the periods!
 export const CATALOGPOLLPERIOD = 259200; // around 6 days
 
-// THIS IS LIVE TESTNET PUBLIC KEY
-export const RICSELLERADDRESS = "0xDF16399E6F10bbC1C07C88c6c70116182FA2e118";
+// THIS IS MAINNET PUBLIC KEY
+export const RICSELLERADDRESS = "0xFA928Af40606D3f77e662e8B991d1926352CFB43";
 const DAOSTAKINGPERIOD = 864000; // around 20 days
 async function main() {
   await deploymentScript({
@@ -28,6 +28,7 @@ type DeploymentArg = {
   CATALOGPOLLPERIOD: number;
   DAOSTAKINGPERIOD: number;
 };
+
 const gasPrice = ethers.utils.parseUnits("32", "gwei");
 // Export for testing
 export async function deploymentScript(arg: DeploymentArg) {
