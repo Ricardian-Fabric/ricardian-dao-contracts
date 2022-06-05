@@ -4,13 +4,13 @@ import { ethers } from "hardhat";
 
 async function main() {
   const catalogDAO = await ethers.getContractFactory("CatalogDao", {
-    libraries: { CatalogDaoLib: "0x0165878A594ca255338adfa4d48449f69242Eb8F" },
+    libraries: { CatalogDaoLib: "0x1FEA72213C853EF9a44A71c1267e018e17f7F5c9" },
   });
   const catalog = catalogDAO.attach(
-    "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+    "0x30E072A9dfF6A38fC626fb58326683F6C74e37ca"
   );
 
-  await catalog.setPollPeriod("50");
+  await catalog.setPollPeriod("259200");
 
   console.log("DONE");
 }
