@@ -4,49 +4,23 @@ The smart contracts in this library are the DAO contracts for Ricardian Fabric.
 
 #NOTE : We are currently REFACTORING to deploy this on MULTIPLE CHAINS!
 
-## Mainnet addresses:
+## LATEST: Mainnet addresses:
 
-Signup deployed to : 0xdC627A00D6d717c3A920ed07C28027E6f4474dF6
+Signup deployed to : 0xE1fe19295EcE29eCE8a25969aDf5D5650a10b914
 
-Trails deployed to : 0x278dD2cc09cE7f4Edf0bcda5927fE7BD3D99cD82
+CatalogDAO library deployed to :
 
-CatalogDAO library deployed to : 0x391334352230326A05b17B44bf1a8b84309C9a81
+CatalogDAO deployed to : 0x30E072A9dfF6A38fC626fb58326683F6C74e37ca
 
-CatalogDAO deployed to : 0x43BAdA39C45dbeE132Da6bD6d6d9818E8c5e06EF
+Ric deployed to : 0x7FDFBBb392d17774CF95F761a843a4408965f2a8
 
-Ric deployed to : 0xDe307524826Bf49c7e7DA469E0c5cf47D8f6AAdC
+Ric Sale deployed to: 0x0e1a755B1DA431a8e0dc37c5DD8C23B8f7f23C41
 
-Ric Sale deployed to: 0xf96EC150FF4fBC15a176a3E50163D0A1ebA54532
+DaoStaking deployed to: 0x484205757e7f5e376a40Cf378eeedF75089B42A5
 
-ArwavePs deployed to: 0xdBfce4149b4443c885d7d4d3E686F2E2a31378B8
+FeeDao deployed to: 0xdBB2543b6Ef7e8480b51bE37f87fDd099b14cf86
 
-DaoStaking deployed to: 0x8f22458612812947F05C9eAfcE2526df40FB6D2d
-
-FeeDao deployed to: 0x1208DE8EBf20B265293c1cC4C3eb93Ad076b809F
-
-Ricvault deployed to : 0x2011fB94B5fe2a44bD6d95791312578c44730a14
-
-## Testnet addresses
-
-Signup deployed to: 0xEaF201f1d59BFa87176C4445B22A5fF4a0fAa23b
-
-Trails deployed to 0x0A40FF105c915955071e6F2214247670c8d91dED
-
-CatalogDAO library deployed to: 0x61f1326876C1C2DB4DCB2E6D2bfA45c98D207615
-
-Catalogdao deployed to: 0x8Ea39d9b53DDBC2F81B2c64FbA8d47f6b7cF3107
-
-Ric deployed to: 0x3DdfA89CfAD4f6d812b55A3AE87c00A1cAE2F38f
-
-Ric sale deployed to: 0xCeF11F95ef976e60d69f30edaCCEA48099c97879
-
-ArweavePs deployed to: 0x51f3A69de3D890f42422BC8cc652eDB59fc065AA
-
-DaoStaking deployed to: 0x9dC2702FE6224fE880d345D079A30b01ba1cE905
-
-FeeDao deployed to: 0xB839D0e2997859D8d2e47c47dbF16939ee655336
-
-Ric vault deployed to: 0x93cb87281CFCfb3dABbC72c5f307f17A79F806db
+Ricvault deployed to : 0x1d87b41128B645250e71EE546AC944062F7D46c3
 
 ## Smart contracts
 
