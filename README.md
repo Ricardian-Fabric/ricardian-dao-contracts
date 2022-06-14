@@ -100,17 +100,6 @@ You can find the Api in the /docs folder.
 - The **FeeDao locks up Ric** after a reward is claimed.
 - Ric is **released after the required block number**.
 
-### Token allocation table
-
-You can find the allocation as code in the deployment script.
-
-| Supply | Allocation                                                                                      | Commitment                                                                                                                                                                                          |
-| ------ | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 20%    | Transfered to the DaoStaking contract and will be used for reward distribution for contributors | Sponsoring 2000 contributions to the catalog with the max reward of 10000 Ric per proposal.                                                                                                         |
-| 40%    | Membership tokens are sold with a rate of 5 RIC / ONE.                                          | Committed to run a new validator and delegate ONE to support decentralization of Harmony after the sale.                                                                                            |
-| 20%    | Used for sponsoring the future development of Ricardian Fabric                                  | The tokens are divided and locked in the RicVault and 10% of this allocation is released every 5 months back to the deployer. The deployer commits for further lock ups as the tokens are released. |
-| 20%    | Ecosystem, Liquidity, Grants, Rewards...                                                        | Lock ups like above. Committed to not exchange these directly to other tokens. These will be used for adding liquidity to DEX, Grants for developers to help stake, rewards for contributions...    |
-
 ### Build
 
     npx hardhat commpile
