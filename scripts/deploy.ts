@@ -64,116 +64,93 @@ export async function deploymentScript(arg: DeploymentArg) {
         ric.deployTransaction.gasLimit
       );
       setTimeout(async () => {
-        const RICSale = await ethers.getContractFactory("RicSale");
+        const DAOStaking = await ethers.getContractFactory("DaoStaking");
 
-        const RicSale = await RICSale.deploy(RICSELLERADDRESS, ric.address, {
-          gasPrice: gasPrice,
-        });
-        const ricsale = await RicSale.deployed();
-        console.log("Ric sale deployed to:", ricsale.address);
-
+        const DaoStaking = await DAOStaking.deploy(
+          ric.address,
+          arg.DAOSTAKINGPERIOD,
+          { gasPrice: gasPrice }
+        );
+        const daoStaking = await DaoStaking.deployed();
+        console.log("DaoStaking deployed to:", daoStaking.address);
         console.log(
-          "RicSale deploy transaction gasPrice",
-          ricsale.deployTransaction.gasPrice,
+          "DaoStaking deploy transaction gasPrice",
+          daoStaking.deployTransaction.gasPrice,
           " gasLimit: ",
-          ricsale.deployTransaction.gasLimit
+          daoStaking.deployTransaction.gasLimit
         );
         setTimeout(async () => {
-          const DAOStaking = await ethers.getContractFactory("DaoStaking");
-
-          const DaoStaking = await DAOStaking.deploy(
-            ric.address,
-            arg.DAOSTAKINGPERIOD,
-            { gasPrice: gasPrice }
+          const CatalogDAOLib = await ethers.getContractFactory(
+            "CatalogDaoLib"
           );
-          const daoStaking = await DaoStaking.deployed();
-          console.log("DaoStaking deployed to:", daoStaking.address);
+          const catalogDAOLib = await CatalogDAOLib.deploy({
+            gasPrice: gasPrice,
+          });
+          const catalogdaolib = await catalogDAOLib.deployed();
+          console.log("CatalogDAO library deployed to:", catalogdaolib.address);
           console.log(
-            "DaoStaking deploy transaction gasPrice",
-            daoStaking.deployTransaction.gasPrice,
+            "CatalogDaoLibrary deploy transaction gasPrice",
+            catalogdaolib.deployTransaction.gasPrice,
             " gasLimit: ",
-            daoStaking.deployTransaction.gasLimit
+            catalogdaolib.deployTransaction.gasLimit
           );
           setTimeout(async () => {
-            const CatalogDAOLib = await ethers.getContractFactory(
-              "CatalogDaoLib"
-            );
-            const catalogDAOLib = await CatalogDAOLib.deploy({
-              gasPrice: gasPrice,
+            const CatalogDAO = await ethers.getContractFactory("CatalogDao", {
+              libraries: { CatalogDaoLib: catalogdaolib.address },
             });
-            const catalogdaolib = await catalogDAOLib.deployed();
-            console.log(
-              "CatalogDAO library deployed to:",
-              catalogdaolib.address
+            const catalogDAO = await CatalogDAO.deploy(
+              arg.CATALOGPOLLPERIOD,
+              daoStaking.address,
+              { gasPrice: gasPrice }
             );
+            await catalogDAO.deployed();
+            console.log("Catalogdao deployed to:", catalogDAO.address);
             console.log(
-              "CatalogDaoLibrary deploy transaction gasPrice",
-              catalogdaolib.deployTransaction.gasPrice,
+              "CatalogDao deploy transaction gasPrice",
+              catalogDAO.deployTransaction.gasPrice,
               " gasLimit: ",
-              catalogdaolib.deployTransaction.gasLimit
+              catalogDAO.deployTransaction.gasLimit
             );
             setTimeout(async () => {
-              const CatalogDAO = await ethers.getContractFactory("CatalogDao", {
-                libraries: { CatalogDaoLib: catalogdaolib.address },
-              });
-              // The voting period should be 302400 on Harmony network
-              // It's 259200 now on Harmony testnet
-              const catalogDAO = await CatalogDAO.deploy(
-                arg.CATALOGPOLLPERIOD,
-                daoStaking.address,
-                { gasPrice: gasPrice }
-              );
-              await catalogDAO.deployed();
-              console.log("Catalogdao deployed to:", catalogDAO.address);
-              console.log(
-                "CatalogDao deploy transaction gasPrice",
-                catalogDAO.deployTransaction.gasPrice,
-                " gasLimit: ",
-                catalogDAO.deployTransaction.gasLimit
-              );
+              daoStaking.setCatalogDao(catalogDAO.address);
               setTimeout(async () => {
-                daoStaking.setCatalogDao(catalogDAO.address);
+                const FeeDAO = await ethers.getContractFactory("FeeDao");
+                const feeDao = await FeeDAO.deploy(
+                  ric.address,
+                  daoStaking.address,
+                  catalogDAO.address,
+                  arg.FEEDAOPOLLPERIOD,
+                  { gasPrice: gasPrice }
+                );
+                const feedao = await feeDao.deployed();
+                console.log("FeeDao deployed to:", feedao.address);
+                console.log(
+                  "FeeDao deploy transaction gasPrice",
+                  feedao.deployTransaction.gasPrice,
+                  " gasLimit: ",
+                  feedao.deployTransaction.gasLimit
+                );
                 setTimeout(async () => {
-                  const FeeDAO = await ethers.getContractFactory("FeeDao");
-                  const feeDao = await FeeDAO.deploy(
-                    ric.address,
-                    daoStaking.address,
-                    catalogDAO.address,
-                    arg.FEEDAOPOLLPERIOD,
-                    { gasPrice: gasPrice }
-                  );
-                  const feedao = await feeDao.deployed();
-                  console.log("FeeDao deployed to:", feedao.address);
+                  const RicVault = await ethers.getContractFactory("RicVault");
+                  const ricVault = await RicVault.deploy(ric.address, {
+                    gasPrice: gasPrice,
+                  });
+                  const ricvault = await ricVault.deployed();
+                  console.log("Ric vault deployed to: ", ricvault.address);
                   console.log(
-                    "FeeDao deploy transaction gasPrice",
-                    feedao.deployTransaction.gasPrice,
+                    "Ric vault deploy transaction gasPrice",
+                    ricvault.deployTransaction.gasPrice,
                     " gasLimit: ",
-                    feedao.deployTransaction.gasLimit
+                    ricvault.deployTransaction.gasLimit
                   );
                   setTimeout(async () => {
-                    const RicVault = await ethers.getContractFactory(
-                      "RicVault"
-                    );
-                    const ricVault = await RicVault.deploy(ric.address, {
+                    await feedao.setRicVault(ricvault.address, {
                       gasPrice: gasPrice,
                     });
-                    const ricvault = await ricVault.deployed();
-                    console.log("Ric vault deployed to: ", ricvault.address);
-                    console.log(
-                      "Ric vault deploy transaction gasPrice",
-                      ricvault.deployTransaction.gasPrice,
-                      " gasLimit: ",
-                      ricvault.deployTransaction.gasLimit
-                    );
                     setTimeout(async () => {
-                      await feedao.setRicVault(ricvault.address, {
+                      await ricvault.setFeeDao(feedao.address, {
                         gasPrice: gasPrice,
                       });
-                      setTimeout(async () => {
-                        await ricvault.setFeeDao(feedao.address, {
-                          gasPrice: gasPrice,
-                        });
-                      }, 28000);
                     }, 26000);
                   }, 24000);
                 }, 22000);

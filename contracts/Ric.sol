@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract Ric is ERC20 {
     event Burn(uint256 value, address burner);
 
-    constructor(uint256 initialSupply) ERC20("OneRIC", "OneRIC") {
+    constructor(uint256 initialSupply) ERC20("PolyRIC", "PolyRIC") {
         _mint(msg.sender, initialSupply);
     }
 

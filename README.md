@@ -4,7 +4,23 @@ The smart contracts in this library are the DAO contracts for Ricardian Fabric.
 
 #NOTE : We are currently REFACTORING to deploy this on MULTIPLE CHAINS!
 
-## LATEST: Mainnet addresses:
+## MIGRATION TO POLYGON
+
+Signup deployed to: 0xE1fe19295EcE29eCE8a25969aDf5D5650a10b914
+
+Ric deployed to: 0x7FDFBBb392d17774CF95F761a843a4408965f2a8
+
+DaoStaking deployed to: 0x0e1a755B1DA431a8e0dc37c5DD8C23B8f7f23C41
+
+CatalogDAO library deployed to: 0x484205757e7f5e376a40Cf378eeedF75089B42A5
+
+Catalogdao deployed to: 0x1FEA72213C853EF9a44A71c1267e018e17f7F5c9
+
+FeeDao deployed to: 0xFB41AF36eB2065A520Fd4C215170A2aE3f8a7B90
+
+Ric vault deployed to: 0xdBB2543b6Ef7e8480b51bE37f87fDd099b14cf86
+
+## Mainnet addresses (HARMONY ONE):
 
 Signup deployed to : 0xE1fe19295EcE29eCE8a25969aDf5D5650a10b914
 
