@@ -34,7 +34,6 @@ const config: HardhatUserConfig = {
     //   accounts:
     //     process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     // },
-    // localhost: { url: "http://127.0.0.1:8545" },
     harmonytestnet: {
       url: process.env.HARMONY_TESTNET,
       accounts:
@@ -42,6 +41,11 @@ const config: HardhatUserConfig = {
     },
     harmonymainnet: {
       url: process.env.HARMONY_MAINNET,
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    polygonmainnet: {
+      url: process.env.MATIC_MAINNET,
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
