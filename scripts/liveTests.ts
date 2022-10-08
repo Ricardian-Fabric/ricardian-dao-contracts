@@ -7,7 +7,7 @@ async function main() {
   console.log(await ricsale.remainingTokens());
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+// main().catch((error) => {
+//   console.error(error);
+//   process.exitCode = 1;
+// });
