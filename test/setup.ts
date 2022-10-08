@@ -41,7 +41,7 @@ export async function setUp(withStake: boolean): Promise<any> {
 
   const RICSale = await ethers.getContractFactory("RicSale");
 
-  const RicSale = await RICSale.deploy(owner.address, ric.address);
+  const RicSale = await RICSale.deploy(owner.address, ric.address, 2);
   const ricsale = await RicSale.deployed();
 
   const DAOStaking = await ethers.getContractFactory("DaoStaking");
