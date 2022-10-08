@@ -34,21 +34,25 @@ const config: HardhatUserConfig = {
     //   accounts:
     //     process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     // },
-    harmonytestnet: {
-      url: process.env.HARMONY_TESTNET,
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-    harmonymainnet: {
-      url: process.env.HARMONY_MAINNET,
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
-    polygonmainnet: {
-      url: process.env.MATIC_MAINNET,
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    },
+    // harmonytestnet: {
+    //   url: process.env.HARMONY_TESTNET,
+    //   accounts:
+    //     process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // },
+    // harmonymainnet: {
+    //   url: process.env.HARMONY_MAINNET,
+    //   accounts:
+    //     process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // },
+    // polygonmainnet: {
+    //   url: process.env.MATIC_MAINNET,
+    //   accounts:
+    //  process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // },
+    // mumbaiTestnet: {
+    //   url: process.env.MUMBAI_TESTNET,
+    //   accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    // }
   },
   gasReporter: {
     enabled: true,
