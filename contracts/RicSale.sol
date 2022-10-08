@@ -1,9 +1,12 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
@@ -26,6 +29,13 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 contract RicSale is Context, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
+    using SafeCast for int256;
+
+    // The chainlink priceFeed
+    AggregatorV3Interface internal priceFeed;
+
+    // The current version
+    uint8 private testnet;
 
     // The token being sold
     IERC20 private _token;
@@ -55,14 +65,33 @@ contract RicSale is Context, ReentrancyGuard {
     /**
      * @param _wallet_ Address where collected funds will be forwarded to
      * @param _token_ Address of the token being sold
+     * @param _testnet Pass 0 if it's not testnet, pass 1 for Mumbai testnet and 2 or other number for local testing
      */
-    constructor(address payable _wallet_, IERC20 _token_) {
+    constructor(
+        address payable _wallet_,
+        IERC20 _token_,
+        uint8 _testnet
+    ) {
         require(_wallet_ != address(0), "948");
         require(address(_token_) != address(0), "948");
 
         _wallet = _wallet_;
         _token = _token_;
         tokensSold = 0;
+
+        testnet = _testnet;
+
+        if (_testnet == 0) {
+            // Polygon Mainnet
+            priceFeed = AggregatorV3Interface(
+                0xAB594600376Ec9fD91F8e885dADF0CE036862dE0
+            );
+        } else if (_testnet == 1) {
+            // Mumbai Testnet
+            priceFeed = AggregatorV3Interface(
+                0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada
+            );
+        }
     }
 
     /**
@@ -109,9 +138,9 @@ contract RicSale is Context, ReentrancyGuard {
         _preValidatePurchase(msg.sender, weiAmount);
         // calculate token amount to be created
         uint256 tokens = _getTokenAmount(currentRate, weiAmount);
-        require(tokens <= 100000e18, "950"); // Maximum purchase amount per purchase
+        // Update how many tokens were already sold
         tokensSold = tokensSold.add(tokens);
-        // update state
+        // update how much wei was raised
         _weiRaised = _weiRaised.add(weiAmount);
         _processPurchase(msg.sender, tokens);
         emit TokensPurchased(_msgSender(), msg.sender, weiAmount, tokens);
@@ -199,7 +228,15 @@ contract RicSale is Context, ReentrancyGuard {
         return tokensSold;
     }
 
-    function getCurrentRate() public pure returns (uint256) {
+    function getCurrentRate() public view returns (uint256) {
+        if (testnet == 0 || testnet == 1) {
+            uint256 price = getLatestPrice();
+            // The returned price has 8 decimals. so price * 10^8 will be the dollar price
+            // The token sale is hard coded to sell 1 token for 10 cents
+            // I calculate the rate like (price divided by 10^7)
+            return price.div(10000000);
+        }
+
         return 5;
     }
 
@@ -221,5 +258,18 @@ contract RicSale is Context, ReentrancyGuard {
      */
     function _forwardFunds() internal {
         _wallet.transfer(msg.value);
+    }
+
+    function getLatestPrice() public view returns (uint256) {
+        (
+            ,
+            /*uint80 roundID*/
+            int256 price, /*uint startedAt*/ /*uint timeStamp*/
+            ,
+            ,
+
+        ) = /*uint80 answeredInRound*/
+            priceFeed.latestRoundData();
+        return price.toUint256();
     }
 }
